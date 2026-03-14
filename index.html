@@ -127,17 +127,25 @@
             font-size: 22px;
             color: #000;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             word-break: keep-all;
         }
 
-        #movie-rating {
-            font-size: 20px;
-            color: #ffaa00;
-            margin-bottom: 5px;
+        .ratings-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .rate-line {
+            font-size: 19px;
             font-weight: bold;
             text-shadow: 1px 1px #000;
         }
+
+        #rate-naver { color: #ffaa00; }
+        #rate-rotten { color: #ff3131; }
 
         #movie-genre {
             font-size: 14px;
@@ -214,7 +222,10 @@
 
             <div class="result-box" id="result-box">
                 <div id="movie-title">READY TO SNIPE?</div>
-                <div id="movie-rating">⭐ SCORE: --</div>
+                <div class="ratings-container">
+                    <div id="rate-naver" class="rate-line">⭐ NAVER: --</div>
+                    <div id="rate-rotten" class="rate-line">🍅 ROTTEN: --</div>
+                </div>
                 <div id="movie-genre">PUSH THE BUTTON!</div>
             </div>
 
@@ -230,73 +241,71 @@
     </div>
 
     <script>
-        // Y2K Retro Sound Generator (Win98 style blip/tada)
         function playRetroSound() {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-
-            oscillator.type = 'square'; // Bit-crushed feel
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
             oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-            
             gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-
             oscillator.start();
             oscillator.stop(audioCtx.currentTime + 0.3);
         }
 
         const movies = [
-            // ... (기존 데이터 동일)
-            {t: "스마트폰을 떨어뜨렸을 뿐인데", g: "영화", r: "8.12", s:"스릴러"},
-            {t: "길복순", g: "영화", r: "7.84", s:"액션/누아르"},
-            {t: "승리호", g: "영화", r: "7.52", s:"SF/어드벤처"},
-            {t: "나이브스 아웃: 글래스 어니언", g: "영화", r: "8.32", s:"추리/미스터리"},
-            {t: "서부 전선 이상 없다", g: "영화", r: "8.61", s:"전쟁/드라마"},
-            {t: "로마", g: "영화", r: "8.92", s:"예술/드라마"},
-            {t: "파워 오브 도그", g: "영화", r: "8.25", s:"웨스턴/드라마"},
+            // [MOVIES]
+            {t: "스마트폰을 떨어뜨렸을 뿐인데", g: "영화", r: "8.12", rt: "75%", s:"스릴러"},
+            {t: "길복순", g: "영화", r: "7.84", rt: "82%", s:"액션/누아르"},
+            {t: "승리호", g: "영화", r: "7.52", rt: "69%", s:"SF/어드벤처"},
+            {t: "나이브스 아웃: 글래스 어니언", g: "영화", r: "8.32", rt: "92%", s:"추리/미스터리"},
+            {t: "서부 전선 이상 없다", g: "영화", r: "8.61", rt: "90%", s:"전쟁/드라마"},
+            {t: "로마", g: "영화", r: "8.92", rt: "96%", s:"예술/드라마"},
+            {t: "파워 오브 도그", g: "영화", r: "8.25", rt: "94%", s:"웨스턴/드라마"},
+            {t: "아이리시맨", g: "영화", r: "8.85", rt: "95%", s:"범죄/드라마"},
+            {t: "결혼 이야기", g: "영화", r: "8.95", rt: "94%", s:"드라마/로맨스"},
+            {t: "두 교황", g: "영화", r: "9.12", rt: "89%", s:"드라마/실화"},
+            {t: "틱, 틱... 붐!", g: "영화", r: "9.02", rt: "88%", s:"뮤지컬/드라마"},
+            {t: "돈 룩 업", g: "영화", r: "8.15", rt: "56%", s:"블랙코미디/SF"},
             
-            {t: "더 글로리", g: "드라마", r: "9.21", s:"복수/드라마"},
-            {t: "오징어 게임", g: "드라마", r: "9.42", s:"데스게임"},
-            {t: "브리저튼", g: "드라마", r: "8.45", s:"로맨스"},
-            {t: "기묘한 이야기", g: "드라마", r: "9.58", s:"판타지/호러"},
-            {t: "수리남", g: "드라마", r: "8.65", s:"범죄/스릴러"},
-            {t: "종이의 집", g: "드라마", r: "8.88", s:"범죄/강도"},
-            {t: "퀸스 갬빗", g: "드라마", r: "9.45", s:"체스/드라마"},
-            {t: "나의 아저씨", g: "드라마", r: "9.73", s:"힐링/인생작"},
-            {t: "D.P.", g: "드라마", r: "9.31", s:"군대/사회"},
-            {t: "킹덤", g: "드라마", r: "9.18", s:"사극/좀비"},
-            {t: "블랙미러", g: "드라마", r: "9.10", s:"SF 옴니버스"},
+            // [SERIES]
+            {t: "더 글로리", g: "드라마", r: "9.21", rt: "91%", s:"복수/드라마"},
+            {t: "오징어 게임", g: "드라마", r: "9.42", rt: "95%", s:"데스게임"},
+            {t: "기묘한 이야기", g: "드라마", r: "9.58", rt: "96%", s:"판타지/호러"},
+            {t: "수리남", g: "드라마", r: "8.65", rt: "85%", s:"범죄/스릴러"},
+            {t: "종이의 집", g: "드라마", r: "8.88", rt: "92%", s:"범죄/강도"},
+            {t: "퀸스 갬빗", g: "드라마", r: "9.45", rt: "96%", s:"체스/드라마"},
+            {t: "나의 아저씨", g: "드라마", r: "9.73", rt: "98%", s:"힐링/인생작"},
+            {t: "베터 콜 사울", g: "드라마", r: "9.62", rt: "98%", s:"범죄/드라마"},
+            {t: "킹덤", g: "드라마", r: "9.18", rt: "96%", s:"사극/좀비"},
+            {t: "블랙미러", g: "드라마", r: "9.10", rt: "83%", s:"SF 옴니버스"},
 
-            {t: "피지컬: 100", g: "예능", r: "8.90", s:"서바이벌"},
-            {t: "솔로지옥", g: "예능", r: "7.24", s:"연애 리얼리티"},
-            {t: "흑백요리사", g: "예능", r: "9.35", s:"요리 서바이벌"},
-            {t: "더 인플루언서", g: "예능", r: "7.12", s:"소셜 서바이벌"},
-            {t: "데블스 플랜", g: "예능", r: "8.98", s:"두뇌 게임"},
+            // [SHOWS]
+            {t: "피지컬: 100", g: "예능", r: "8.90", rt: "80%", s:"서바이벌"},
+            {t: "흑백요리사", g: "예능", r: "9.35", rt: "92%", s:"요리 서바이벌"},
+            {t: "데블스 플랜", g: "예능", r: "8.98", rt: "88%", s:"두뇌 게임"},
+            {t: "사이렌: 불의 섬", g: "예능", r: "9.12", rt: "85%", s:"생존 서바이벌"},
 
-            {t: "카우보이 비밥", g: "애니", r: "9.81", s:"SF/누아르"},
-            {t: "러브, 데스 + 로봇", g: "애니", r: "9.05", s:"SF 옴니버스"},
-            {t: "사이버펑크: 엣지러너", g: "애니", r: "9.41", s:"SF/액션"},
-            {t: "귀멸의 칼날", g: "애니", r: "9.28", s:"판타지/액션"},
-            {t: "아케인", g: "애니", r: "9.65", s:"판타지/스팀펑크"}
+            // [ANIME]
+            {t: "카우보이 비밥", g: "애니", r: "9.81", rt: "100%", s:"SF/누아르"},
+            {t: "사이버펑크: 엣지러너", g: "애니", r: "9.41", rt: "100%", s:"SF/액션"},
+            {t: "아케인", g: "애니", r: "9.65", rt: "100%", s:"판타지/스팀펑크"},
+            {t: "귀멸의 칼날", g: "애니", r: "9.28", rt: "87%", s:"판타지/액션"}
         ];
 
-        let lastSnipe = ""; // 직전 결과 저장용
+        let lastSnipe = "";
 
         function snipe() {
             const filter = document.getElementById('genre-filter').value;
             const titleEl = document.getElementById('movie-title');
-            const ratingEl = document.getElementById('movie-rating');
+            const naverEl = document.getElementById('rate-naver');
+            const rottenEl = document.getElementById('rate-rotten');
             const genreEl = document.getElementById('movie-genre');
             
-            // 1. 장르 필터링
             let filteredMovies = filter === "ALL" ? movies : movies.filter(m => m.g === filter);
-            
-            // 2. 중복 방지 로직: 직전 결과 제외 (후보가 2개 이상일 때만 작동)
             if (filteredMovies.length > 1) {
                 filteredMovies = filteredMovies.filter(m => m.t !== lastSnipe);
             }
@@ -310,7 +319,8 @@
             const interval = setInterval(() => {
                 const randomMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
                 titleEl.innerText = randomMovie.t;
-                ratingEl.innerText = "⭐ NAVER: " + randomMovie.r;
+                naverEl.innerText = "⭐ NAVER: " + randomMovie.r;
+                rottenEl.innerText = "🍅 ROTTEN: " + randomMovie.rt;
                 genreEl.innerText = `[${randomMovie.g}] ${randomMovie.s}`;
                 titleEl.style.color = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
                 count++;
@@ -318,16 +328,14 @@
                 if (count > 12) {
                     clearInterval(interval);
                     const finalMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
-                    
-                    // 최종 결과 저장 (다음 턴에서 제외)
                     lastSnipe = finalMovie.t;
-                    
                     titleEl.innerText = finalMovie.t;
-                    ratingEl.innerText = "⭐ NAVER: " + finalMovie.r;
+                    naverEl.innerText = "⭐ NAVER: " + finalMovie.r;
+                    rottenEl.innerText = "🍅 ROTTEN: " + finalMovie.rt;
                     genreEl.innerText = `[${finalMovie.g}] ${finalMovie.s}`;
                     titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
-                    playRetroSound(); // Retro notification sound
+                    playRetroSound();
                     if (navigator.vibrate) navigator.vibrate(200);
                 }
             }, 70);
