@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NETFLIX SNIPER 2000</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-pink: #ff00ff;
+            --cyber-blue: #00ffff;
+            --slime-green: #39ff14;
+            --win-gray: #c0c0c0;
+            --win-dark: #808080;
+        }
+
+        body {
+            background-color: #008080; /* Classic Win95 Teal */
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .window {
+            width: 100%;
+            max-width: 380px;
+            background: var(--win-gray);
+            border: 3px solid;
+            border-color: #fff #808080 #808080 #fff;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+            padding: 3px;
+            box-sizing: border-box;
+        }
+
+        .title-bar {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .title-bar-text { font-size: 18px; }
+        .title-bar-controls button {
+            width: 18px;
+            height: 18px;
+            background: var(--win-gray);
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            border: 2px inset #fff;
+            background: #fff;
+            margin-top: 4px;
+        }
+
+        h1 {
+            color: #ff0000;
+            text-shadow: 2px 2px var(--cyber-blue);
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .marquee {
+            background: #000;
+            color: var(--slime-green);
+            padding: 5px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            border: 2px solid var(--win-dark);
+        }
+
+        .filter-sec {
+            background: var(--win-gray);
+            border: 2px inset #fff;
+            padding: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-sec label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        select {
+            background: #fff;
+            border: 2px solid var(--win-dark);
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            padding: 5px;
+            flex: 1;
+        }
+
+        .result-box {
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 3px dashed var(--hot-pink);
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fdfdfd;
+        }
+
+        #movie-title {
+            font-size: 22px;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 5px;
+            word-break: keep-all;
+        }
+
+        #movie-rating {
+            font-size: 20px;
+            color: #ffaa00;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-shadow: 1px 1px #000;
+        }
+
+        #movie-genre {
+            font-size: 14px;
+            color: var(--win-dark);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .snipe-btn {
+            background: var(--hot-pink);
+            color: white;
+            border: 4px outset var(--hot-pink);
+            padding: 15px 30px;
+            font-size: 24px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            text-shadow: 2px 2px #000;
+            width: 100%;
+            -webkit-appearance: none;
+        }
+
+        .snipe-btn:active {
+            border-style: inset;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #808080;
+        }
+
+        @keyframes rainbow {
+            0% { color: red; }
+            20% { color: yellow; }
+            40% { color: green; }
+            60% { color: blue; }
+            80% { color: purple; }
+            100% { color: red; }
+        }
+        .glitter { animation: rainbow 1s infinite; }
+    </style>
+</head>
+<body>
+
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">NETFLIX_SNIPER.EXE</div>
+            <div class="title-bar-controls">
+                <button>_</button>
+                <button>□</button>
+                <button>×</button>
+            </div>
+        </div>
+        <div class="content">
+            <h1>NETFLIX SNIPER</h1>
+            <div class="marquee">
+                <marquee scrollamount="5">W H A T  T O  W A T C H  T O D A Y ?  -  P I C K  Y O U  D E S T I N Y !</marquee>
+            </div>
+
+            <div class="filter-sec">
+                <label>TYPE:</label>
+                <select id="genre-filter">
+                    <option value="ALL">ALL CONTENT</option>
+                    <option value="영화">MOVIES (영화)</option>
+                    <option value="드라마">SERIES (드라마)</option>
+                    <option value="예능">SHOWS (예능)</option>
+                    <option value="애니">ANIME (애니)</option>
+                </select>
+            </div>
+
+            <div class="result-box" id="result-box">
+                <div id="movie-title">READY TO SNIPE?</div>
+                <div id="movie-rating">⭐ SCORE: --</div>
+                <div id="movie-genre">PUSH THE BUTTON!</div>
+            </div>
+
+            <div class="btn-container">
+                <button class="snipe-btn" onclick="snipe()">[ SNIPE IT! ]</button>
+            </div>
+
+            <div class="footer">
+                (C) 2000 CEOK MULTIMEDIA SYSTEM<br>
+                <span class="glitter">Best viewed in Netscape 4.0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Y2K Retro Sound Generator (Win98 style blip/tada)
+        function playRetroSound() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'square'; // Bit-crushed feel
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.3);
+        }
+
+        const movies = [
+            // ... (기존 데이터 동일)
+            {t: "스마트폰을 떨어뜨렸을 뿐인데", g: "영화", r: "8.12", s:"스릴러"},
+            {t: "길복순", g: "영화", r: "7.84", s:"액션/누아르"},
+            {t: "승리호", g: "영화", r: "7.52", s:"SF/어드벤처"},
+            {t: "나이브스 아웃: 글래스 어니언", g: "영화", r: "8.32", s:"추리/미스터리"},
+            {t: "서부 전선 이상 없다", g: "영화", r: "8.61", s:"전쟁/드라마"},
+            {t: "로마", g: "영화", r: "8.92", s:"예술/드라마"},
+            {t: "파워 오브 도그", g: "영화", r: "8.25", s:"웨스턴/드라마"},
+            
+            {t: "더 글로리", g: "드라마", r: "9.21", s:"복수/드라마"},
+            {t: "오징어 게임", g: "드라마", r: "9.42", s:"데스게임"},
+            {t: "브리저튼", g: "드라마", r: "8.45", s:"로맨스"},
+            {t: "기묘한 이야기", g: "드라마", r: "9.58", s:"판타지/호러"},
+            {t: "수리남", g: "드라마", r: "8.65", s:"범죄/스릴러"},
+            {t: "종이의 집", g: "드라마", r: "8.88", s:"범죄/강도"},
+            {t: "퀸스 갬빗", g: "드라마", r: "9.45", s:"체스/드라마"},
+            {t: "나의 아저씨", g: "드라마", r: "9.73", s:"힐링/인생작"},
+            {t: "D.P.", g: "드라마", r: "9.31", s:"군대/사회"},
+            {t: "킹덤", g: "드라마", r: "9.18", s:"사극/좀비"},
+            {t: "블랙미러", g: "드라마", r: "9.10", s:"SF 옴니버스"},
+
+            {t: "피지컬: 100", g: "예능", r: "8.90", s:"서바이벌"},
+            {t: "솔로지옥", g: "예능", r: "7.24", s:"연애 리얼리티"},
+            {t: "흑백요리사", g: "예능", r: "9.35", s:"요리 서바이벌"},
+            {t: "더 인플루언서", g: "예능", r: "7.12", s:"소셜 서바이벌"},
+            {t: "데블스 플랜", g: "예능", r: "8.98", s:"두뇌 게임"},
+
+            {t: "카우보이 비밥", g: "애니", r: "9.81", s:"SF/누아르"},
+            {t: "러브, 데스 + 로봇", g: "애니", r: "9.05", s:"SF 옴니버스"},
+            {t: "사이버펑크: 엣지러너", g: "애니", r: "9.41", s:"SF/액션"},
+            {t: "귀멸의 칼날", g: "애니", r: "9.28", s:"판타지/액션"},
+            {t: "아케인", g: "애니", r: "9.65", s:"판타지/스팀펑크"}
+        ];
+
+        let lastSnipe = ""; // 직전 결과 저장용
+
+        function snipe() {
+            const filter = document.getElementById('genre-filter').value;
+            const titleEl = document.getElementById('movie-title');
+            const ratingEl = document.getElementById('movie-rating');
+            const genreEl = document.getElementById('movie-genre');
+            
+            // 1. 장르 필터링
+            let filteredMovies = filter === "ALL" ? movies : movies.filter(m => m.g === filter);
+            
+            // 2. 중복 방지 로직: 직전 결과 제외 (후보가 2개 이상일 때만 작동)
+            if (filteredMovies.length > 1) {
+                filteredMovies = filteredMovies.filter(m => m.t !== lastSnipe);
+            }
+            
+            if (filteredMovies.length === 0) {
+                alert("COMING SOON!");
+                return;
+            }
+
+            let count = 0;
+            const interval = setInterval(() => {
+                const randomMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
+                titleEl.innerText = randomMovie.t;
+                ratingEl.innerText = "⭐ NAVER: " + randomMovie.r;
+                genreEl.innerText = `[${randomMovie.g}] ${randomMovie.s}`;
+                titleEl.style.color = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
+                count++;
+                
+                if (count > 12) {
+                    clearInterval(interval);
+                    const finalMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
+                    
+                    // 최종 결과 저장 (다음 턴에서 제외)
+                    lastSnipe = finalMovie.t;
+                    
+                    titleEl.innerText = finalMovie.t;
+                    ratingEl.innerText = "⭐ NAVER: " + finalMovie.r;
+                    genreEl.innerText = `[${finalMovie.g}] ${finalMovie.s}`;
+                    titleEl.style.color = "#ff0000";
+                    titleEl.classList.add('glitter');
+                    playRetroSound(); // Retro notification sound
+                    if (navigator.vibrate) navigator.vibrate(200);
+                }
+            }, 70);
+        }
+    </script>
+</body>
+</html>
