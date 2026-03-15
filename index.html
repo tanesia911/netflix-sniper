@@ -19,7 +19,7 @@
     <meta name="apple-mobile-web-app-title" content="Sniper">
     <link rel="apple-touch-icon" href="icon-512.png">
 
-    <!-- 캐시 방지 메타 태그 -->
+    <!-- 캐시 방지 -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -36,16 +36,16 @@
         }
 
         body {
-            background-color: #008080; /* Classic Win95 Teal */
+            background-color: #008080;
             background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
             font-family: 'VT323', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            min-height: -webkit-fill-available; /* iOS Safari 대응 */
+            min-height: -webkit-fill-available;
             margin: 0;
-            padding: 5px;
+            padding: 10px;
             box-sizing: border-box;
         }
 
@@ -58,152 +58,175 @@
             box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
             padding: 2px;
             box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
         }
 
         .title-bar {
             background: linear-gradient(90deg, #000080, #1084d0);
             color: white;
-            padding: 3px 6px;
+            padding: 4px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
             letter-spacing: 1px;
-            width: 100%;
-            box-sizing: border-box;
         }
 
-        .title-bar-text { font-size: 14px; }
-        .title-bar-controls {
-            display: flex;
-            gap: 2px;
-        }
+        .title-bar-text { font-size: 16px; }
+        .title-bar-controls { display: flex; gap: 2px; }
         .title-bar-controls button {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             background: var(--win-gray);
-            border: 1px solid;
+            border: 2px solid;
             border-color: #fff #000 #000 #fff;
-            font-size: 8px;
+            font-size: 10px;
             cursor: pointer;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 0;
         }
 
         .content {
-            padding: 10px 15px; /* 패딩 축소 */
+            padding: 15px;
             text-align: center;
             border: 2px inset #fff;
             background: #fff;
-            margin-top: 2px;
-            overflow-y: auto; /* 내용 많을 때 내부 스크롤 */
-            width: 100%;
-            box-sizing: border-box;
+            margin-top: 4px;
         }
 
         h1 {
             color: #ff0000;
             text-shadow: 2px 2px var(--cyber-blue);
-            font-size: 28px; /* 크기 축소 */
-            margin: 5px 0;
+            font-size: 34px;
+            margin: 5px 0 10px 0;
             font-style: italic;
         }
 
         .marquee {
             background: #000;
             color: var(--slime-green);
-            padding: 3px;
-            margin-bottom: 8px;
-            font-size: 16px;
+            padding: 5px;
+            margin-bottom: 15px;
+            font-size: 18px;
             border: 2px solid var(--win-dark);
         }
 
         .filter-sec {
             background: var(--win-gray);
             border: 2px inset #fff;
-            padding: 5px;
-            margin-bottom: 10px;
+            padding: 8px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: center;
             gap: 10px;
             align-items: center;
         }
 
+        .filter-sec label { font-size: 14px; font-weight: bold; color: #000; }
+        select {
+            background: #fff;
+            border: 2px solid var(--win-dark);
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            padding: 4px;
+            flex: 1;
+        }
+
         .result-box {
-            min-height: 120px; /* 대폭 축소 */
+            min-height: 180px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border: 3px dashed var(--hot-pink);
-            margin-bottom: 10px;
-            padding: 10px 5px;
+            margin-bottom: 20px;
+            padding: 15px 10px;
             background: #fdfdfd;
         }
 
         #movie-title {
-            font-size: 22px; /* 크기 최적화 */
+            font-size: 26px;
             color: #ff0000;
             font-weight: bold;
-            margin: 2px 0;
+            margin-bottom: 8px;
             line-height: 1.2;
+            text-shadow: 1px 1px 0px #00ffff;
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         #movie-percentile {
-            font-size: 15px; /* 크기 대폭 축소 */
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 8px;
-            display: block;
+            margin-bottom: 12px;
             text-shadow: 1px 1px 1px #000;
         }
 
         .ratings-container {
             display: flex;
             flex-direction: row;
-            justify-content: center;
             flex-wrap: wrap;
-            gap: 4px; /* 간격 축소 */
-            margin-bottom: 8px;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
             width: 100%;
         }
 
         .rate-line {
-            font-size: 13px; /* 크기 축소 */
+            font-size: 15px;
             font-weight: bold;
             display: flex;
             align-items: center;
             background: #f0f0f0;
-            padding: 2px 5px; /* 패딩 축소 */
+            padding: 3px 8px;
             border: 1px outset #fff;
             white-space: nowrap;
             color: #333;
         }
 
+        #rate-naver { border-bottom: 2px solid #2db400; }
+        #rate-imdb { border-bottom: 2px solid #f5c518; }
+        #rate-rotten { border-bottom: 2px solid #fa320a; }
+
+        #movie-genre {
+            font-size: 14px;
+            color: var(--win-dark);
+        }
+
         .btn-container {
-            gap: 5px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-direction: column;
         }
 
         .snipe-btn {
-            padding: 10px 20px;
-            font-size: 20px;
+            background: var(--hot-pink);
+            color: white;
+            border: 4px outset var(--hot-pink);
+            padding: 12px 20px;
+            font-size: 24px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            text-shadow: 2px 2px #000;
+            width: 100%;
+            -webkit-appearance: none;
         }
 
         .copy-btn {
-            padding: 5px;
-            font-size: 16px;
+            background: var(--win-gray);
+            color: #000;
+            border: 3px outset #fff;
+            padding: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            width: 100%;
+            margin-top: 5px;
         }
 
-        .copy-btn:active {
-            border-style: inset;
-        }
-
-        .snipe-btn:active {
-            border-style: inset;
-        }
+        .copy-btn:active, .snipe-btn:active { border-style: inset; }
 
         .footer {
             margin-top: 15px;
@@ -212,12 +235,8 @@
         }
 
         @keyframes rainbow {
-            0% { color: red; }
-            20% { color: yellow; }
-            40% { color: green; }
-            60% { color: blue; }
-            80% { color: purple; }
-            100% { color: red; }
+            0% { color: red; } 20% { color: yellow; } 40% { color: green; } 
+            60% { color: blue; } 80% { color: purple; } 100% { color: red; }
         }
         .glitter { animation: rainbow 1s infinite; }
     </style>
@@ -252,7 +271,7 @@
             </div>
 
             <div class="result-box" id="result-box">
-                <div id="movie-title" style="cursor: pointer; text-decoration: underline;" onclick="openNetflix()">READY TO SNIPE?</div>
+                <div id="movie-title" onclick="openNetflix()">READY TO SNIPE?</div>
                 <div id="movie-percentile"></div>
                 <div class="ratings-container">
                     <div class="rate-line" id="rate-naver">⭐ NAVER: --</div>
@@ -275,23 +294,18 @@
         </div>
     </div>
 
-    <!-- 외부 데이터 파일 로드 (버전 파라미터로 캐시 방지) -->
     <script>
         document.write('<script src="data.js?v=' + new Date().getTime() + '"><\/script>');
     </script>
     <script>
-        // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
-                    // 새 버전 발견 시 자동 업데이트
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
                             if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                if (confirm("새로운 버전이 업데이트되었습니다! 적용할까요?")) {
-                                    window.location.reload();
-                                }
+                                if (confirm("New version available! Reload?")) window.location.reload();
                             }
                         };
                     };
@@ -299,7 +313,6 @@
             });
         }
 
-        // ===== 고도화된 안티-피로 시스템 (LocalStorage) =====
         const HISTORY_KEY = 'sniper_history_v2';
         const HISTORY_SIZE = 50;
         let snipeHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
@@ -313,11 +326,9 @@
 
         function openNetflix() {
             if (!lastResult) return;
-            const url = `https://www.netflix.com/search?q=${encodeURIComponent(lastResult.t)}`;
-            window.open(url, '_blank');
+            window.open(`https://www.netflix.com/search?q=${encodeURIComponent(lastResult.t)}`, '_blank');
         }
 
-        // data.js 로드 후 중복 제거된 유니크 리스트로 정리
         let cleanMovies = [];
         function initData() {
             if (typeof movies === 'undefined') return;
@@ -327,8 +338,7 @@
                 seen.add(m.t);
                 return true;
             });
-            const counter = document.getElementById('data-counter');
-            if (counter) counter.textContent = `LOADED: ${cleanMovies.length} TITLES`;
+            document.getElementById('data-counter').textContent = `LOADED: ${cleanMovies.length} TITLES`;
         }
 
         function playRetroSound() {
@@ -339,25 +349,18 @@
                 oscillator.type = 'square';
                 oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
                 oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.3);
+                oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
+                oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3);
             } catch(e) {}
         }
 
         function copyResult() {
             if (!lastResult) return;
             const grade = getGrade(lastResult.p);
-            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: ${grade.label}]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                alert("결과가 클립보드에 복사되었습니다! 🚀\n친구에게 공유해보세요.");
-            }).catch(err => {
-                alert("복사 실패: " + err);
-            });
+            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: ${grade.label}]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n확인: https://tanesia911.github.io/netflix-sniper/`;
+            navigator.clipboard.writeText(text).then(() => alert("복사 완료! 🚀"));
         }
 
         function getGrade(p) {
@@ -372,12 +375,8 @@
         }
 
         function snipe() {
-            if (cleanMovies.length === 0) {
-                alert("ERROR: DATA.JS NOT FOUND OR EMPTY!");
-                return;
-            }
-
-            const genFilter = document.getElementById('genre-filter').value;
+            if (cleanMovies.length === 0) return;
+            const filter = document.getElementById('genre-filter').value;
             const titleEl = document.getElementById('movie-title');
             const naverEl = document.getElementById('rate-naver');
             const imdbEl = document.getElementById('rate-imdb');
@@ -386,26 +385,11 @@
             const percEl = document.getElementById('movie-percentile');
             const copyBtn = document.getElementById('copy-btn');
 
-            // 1차 필터 (장르)
-            let pool = genFilter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === genFilter);
-            
-            if (pool.length === 0) {
-                alert("해당 조건의 데이터가 부족합니다!\n다른 필터를 선택해 주세요.");
-                return;
-            }
-
-            // 히스토리에 없는 것만 후보로
+            let pool = filter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === filter);
             let candidates = pool.filter(m => !snipeHistory.includes(m.t));
-            if (candidates.length === 0) {
-                alert("모든 콘텐츠를 스나이프했습니다! 히스토리를 리셋합니다.");
-                snipeHistory = [];
-                localStorage.removeItem(HISTORY_KEY);
-                candidates = pool;
-            }
+            if (candidates.length === 0) { snipeHistory = []; localStorage.removeItem(HISTORY_KEY); candidates = pool; }
 
-            titleEl.classList.remove('glitter');
-            copyBtn.style.display = 'none';
-            percEl.innerText = "";
+            titleEl.classList.remove('glitter'); copyBtn.style.display = 'none'; percEl.innerText = "";
             let count = 0;
             const interval = setInterval(() => {
                 const rnd = candidates[Math.floor(Math.random() * candidates.length)];
@@ -416,32 +400,23 @@
                 genreEl.innerText = `[${rnd.g}] ${rnd.s}`;
                 titleEl.style.color = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
                 count++;
-
                 if (count > 14) {
                     clearInterval(interval);
                     const final = candidates[Math.floor(Math.random() * candidates.length)];
-                    lastResult = final;
-                    saveHistory(final.t);
-
+                    lastResult = final; saveHistory(final.t);
                     titleEl.innerText = final.t;
                     naverEl.innerText = "⭐ NAVER: " + final.r;
                     imdbEl.innerText = "🎬 IMDb: " + final.im;
                     rottenEl.innerText = "🍅 ROTTEN: " + final.rt;
                     genreEl.innerText = `[${final.g}] ${final.s}`;
-                    
                     const grade = getGrade(final.p);
                     percEl.innerText = `${grade.label} (상위 ${final.p}%)`;
                     percEl.style.color = grade.color;
-                    
-                    titleEl.classList.add('glitter');
-                    copyBtn.style.display = 'block';
-                    playRetroSound();
-                    if (navigator.vibrate) navigator.vibrate(200);
+                    titleEl.style.color = "#ff0000"; titleEl.classList.add('glitter');
+                    copyBtn.style.display = 'block'; playRetroSound();
                 }
             }, 65);
         }
-
-        // 페이지 로드 시 데이터 초기화
         window.onload = initData;
     </script>
 </body>
