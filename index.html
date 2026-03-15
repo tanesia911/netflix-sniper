@@ -240,6 +240,8 @@
         </div>
     </div>
 
+    <!-- 외부 데이터 파일 로드 -->
+    <script src="data.js"></script>
     <script>
         function playRetroSound() {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -256,46 +258,6 @@
             oscillator.stop(audioCtx.currentTime + 0.3);
         }
 
-        const movies = [
-            // [MOVIES]
-            {t: "스마트폰을 떨어뜨렸을 뿐인데", g: "영화", r: "8.12", rt: "75%", s:"스릴러"},
-            {t: "길복순", g: "영화", r: "7.84", rt: "82%", s:"액션/누아르"},
-            {t: "승리호", g: "영화", r: "7.52", rt: "69%", s:"SF/어드벤처"},
-            {t: "나이브스 아웃: 글래스 어니언", g: "영화", r: "8.32", rt: "92%", s:"추리/미스터리"},
-            {t: "서부 전선 이상 없다", g: "영화", r: "8.61", rt: "90%", s:"전쟁/드라마"},
-            {t: "로마", g: "영화", r: "8.92", rt: "96%", s:"예술/드라마"},
-            {t: "파워 오브 도그", g: "영화", r: "8.25", rt: "94%", s:"웨스턴/드라마"},
-            {t: "아이리시맨", g: "영화", r: "8.85", rt: "95%", s:"범죄/드라마"},
-            {t: "결혼 이야기", g: "영화", r: "8.95", rt: "94%", s:"드라마/로맨스"},
-            {t: "두 교황", g: "영화", r: "9.12", rt: "89%", s:"드라마/실화"},
-            {t: "틱, 틱... 붐!", g: "영화", r: "9.02", rt: "88%", s:"뮤지컬/드라마"},
-            {t: "돈 룩 업", g: "영화", r: "8.15", rt: "56%", s:"블랙코미디/SF"},
-            
-            // [SERIES]
-            {t: "더 글로리", g: "드라마", r: "9.21", rt: "91%", s:"복수/드라마"},
-            {t: "오징어 게임", g: "드라마", r: "9.42", rt: "95%", s:"데스게임"},
-            {t: "기묘한 이야기", g: "드라마", r: "9.58", rt: "96%", s:"판타지/호러"},
-            {t: "수리남", g: "드라마", r: "8.65", rt: "85%", s:"범죄/스릴러"},
-            {t: "종이의 집", g: "드라마", r: "8.88", rt: "92%", s:"범죄/강도"},
-            {t: "퀸스 갬빗", g: "드라마", r: "9.45", rt: "96%", s:"체스/드라마"},
-            {t: "나의 아저씨", g: "드라마", r: "9.73", rt: "98%", s:"힐링/인생작"},
-            {t: "베터 콜 사울", g: "드라마", r: "9.62", rt: "98%", s:"범죄/드라마"},
-            {t: "킹덤", g: "드라마", r: "9.18", rt: "96%", s:"사극/좀비"},
-            {t: "블랙미러", g: "드라마", r: "9.10", rt: "83%", s:"SF 옴니버스"},
-
-            // [SHOWS]
-            {t: "피지컬: 100", g: "예능", r: "8.90", rt: "80%", s:"서바이벌"},
-            {t: "흑백요리사", g: "예능", r: "9.35", rt: "92%", s:"요리 서바이벌"},
-            {t: "데블스 플랜", g: "예능", r: "8.98", rt: "88%", s:"두뇌 게임"},
-            {t: "사이렌: 불의 섬", g: "예능", r: "9.12", rt: "85%", s:"생존 서바이벌"},
-
-            // [ANIME]
-            {t: "카우보이 비밥", g: "애니", r: "9.81", rt: "100%", s:"SF/누아르"},
-            {t: "사이버펑크: 엣지러너", g: "애니", r: "9.41", rt: "100%", s:"SF/액션"},
-            {t: "아케인", g: "애니", r: "9.65", rt: "100%", s:"판타지/스팀펑크"},
-            {t: "귀멸의 칼날", g: "애니", r: "9.28", rt: "87%", s:"판타지/액션"}
-        ];
-
         let lastSnipe = "";
 
         function snipe() {
@@ -305,6 +267,12 @@
             const rottenEl = document.getElementById('rate-rotten');
             const genreEl = document.getElementById('movie-genre');
             
+            // data.js 로드 확인
+            if (typeof movies === 'undefined') {
+                alert("ERROR: DATA.JS NOT FOUND!");
+                return;
+            }
+
             let filteredMovies = filter === "ALL" ? movies : movies.filter(m => m.g === filter);
             if (filteredMovies.length > 1) {
                 filteredMovies = filteredMovies.filter(m => m.t !== lastSnipe);
