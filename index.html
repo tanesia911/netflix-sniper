@@ -255,9 +255,10 @@
             </div>
 
             <div class="result-box" id="result-box">
+                <div id="movie-percentile" style="font-size:16px; color: #ffaa00; font-weight:bold; margin-bottom: 5px;"></div>
                 <div id="movie-title">READY TO SNIPE?</div>
                 <div class="ratings-container">
-                    <div id="rate-naver" class="rate-line">⭐ NAVER: --</div>
+                    <div class="rate-line"><span id="rate-naver">⭐ NAVER: --</span> | <span id="rate-imdb">🎬 IMDb: --</span></div>
                     <div id="rate-rotten" class="rate-line">🍅 ROTTEN: --</div>
                 </div>
                 <div id="movie-genre">PUSH THE BUTTON!</div>
@@ -330,7 +331,7 @@
 
         function copyResult() {
             if (!lastResult) return;
-            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
+            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: 상위 ${lastResult.p}% 명작]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert("결과가 클립보드에 복사되었습니다! 🚀\n친구에게 공유해보세요.");
@@ -348,8 +349,10 @@
             const filter = document.getElementById('genre-filter').value;
             const titleEl = document.getElementById('movie-title');
             const naverEl = document.getElementById('rate-naver');
+            const imdbEl = document.getElementById('rate-imdb');
             const rottenEl = document.getElementById('rate-rotten');
             const genreEl = document.getElementById('movie-genre');
+            const percEl = document.getElementById('movie-percentile');
             const copyBtn = document.getElementById('copy-btn');
 
             // 필터 적용
@@ -370,11 +373,13 @@
             // 룰렛 애니메이션
             titleEl.classList.remove('glitter');
             copyBtn.style.display = 'none';
+            percEl.innerText = "";
             let count = 0;
             const interval = setInterval(() => {
                 const rnd = candidates[Math.floor(Math.random() * candidates.length)];
                 titleEl.innerText = rnd.t;
                 naverEl.innerText = "⭐ NAVER: " + rnd.r;
+                imdbEl.innerText = "🎬 IMDb: " + rnd.im;
                 rottenEl.innerText = "🍅 ROTTEN: " + rnd.rt;
                 genreEl.innerText = `[${rnd.g}] ${rnd.s}`;
                 titleEl.style.color = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
@@ -382,7 +387,7 @@
 
                 if (count > 14) {
                     clearInterval(interval);
-                    // 최종 결과 (완전 랜덤 선택 - 직전 루프 결과와 다르게)
+                    // 최종 결과
                     const final = candidates[Math.floor(Math.random() * candidates.length)];
                     lastResult = final;
 
@@ -392,8 +397,18 @@
 
                     titleEl.innerText = final.t;
                     naverEl.innerText = "⭐ NAVER: " + final.r;
+                    imdbEl.innerText = "🎬 IMDb: " + final.im;
                     rottenEl.innerText = "🍅 ROTTEN: " + final.rt;
                     genreEl.innerText = `[${final.g}] ${final.s}`;
+                    
+                    // 상위 % 표시 및 등급 라벨링
+                    let label = "GOOD CONTENT";
+                    if (final.p <= 1) label = "👑 TOP 1% MASTERPIECE";
+                    else if (final.p <= 5) label = "💎 TOP 5% LEGENDARY";
+                    else if (final.p <= 15) label = "🔥 TOP 15% HIGH QUALITY";
+                    
+                    percEl.innerText = `${label} (상위 ${final.p}%)`;
+                    
                     titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
                     copyBtn.style.display = 'block';
