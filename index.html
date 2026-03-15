@@ -128,52 +128,65 @@
         }
 
         .result-box {
-            min-height: 160px;
+            min-height: 180px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border: 3px dashed var(--hot-pink);
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 15px 10px;
             background: #fdfdfd;
         }
 
         #movie-title {
-            font-size: 24px;
-            color: #000;
+            font-size: 26px;
+            color: #ff0000;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             word-break: keep-all;
             line-height: 1.2;
+            text-shadow: 1px 1px 0px #00ffff;
         }
-
-        .ratings-container {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-
-        .rate-line {
-            font-size: 17px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        #rate-naver { color: #2db400; text-shadow: 0.5px 0.5px #000; }
-        #rate-imdb { color: #f5c518; text-shadow: 0.5px 0.5px #000; }
-        #rate-rotten { color: #fa320a; text-shadow: 0.5px 0.5px #000; }
 
         #movie-percentile {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
-            height: 22px;
-            text-shadow: 1px 1px 2px #000; /* 가독성 핵심 */
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 1px 1px 1px #000;
+        }
+
+        .ratings-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .rate-line {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            background: #eee;
+            padding: 3px 8px;
+            border: 1px inset #fff;
+            white-space: nowrap;
+        }
+
+        #rate-naver { color: #2db400; }
+        #rate-imdb { color: #8a6d3b; }
+        #rate-rotten { color: #fa320a; }
+
+        #movie-genre {
+            font-size: 15px;
+            color: var(--win-dark);
+            border-top: 1px solid #ddd;
+            padding-top: 5px;
+            width: 100%;
         }
 
         .btn-container {
@@ -277,13 +290,9 @@
                 <div id="movie-title" style="cursor: pointer; text-decoration: underline;" onclick="openNetflix()">READY TO SNIPE?</div>
                 <div id="movie-percentile"></div>
                 <div class="ratings-container">
-                    <div class="rate-line">
-                        <span id="rate-naver">⭐ NAVER: --</span>
-                        <span id="rate-imdb">🎬 IMDb: --</span>
-                    </div>
-                    <div class="rate-line">
-                        <span id="rate-rotten">🍅 ROTTEN: --</span>
-                    </div>
+                    <div class="rate-line" id="rate-naver">⭐ NAVER: --</div>
+                    <div class="rate-line" id="rate-imdb">🎬 IMDb: --</div>
+                    <div class="rate-line" id="rate-rotten">🍅 ROTTEN: --</div>
                 </div>
                 <div id="movie-genre">PUSH THE BUTTON!</div>
             </div>
@@ -461,7 +470,6 @@
                     percEl.innerText = `${grade.label} (상위 ${final.p}%)`;
                     percEl.style.color = grade.color;
                     
-                    titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
                     copyBtn.style.display = 'block';
                     playRetroSound();
