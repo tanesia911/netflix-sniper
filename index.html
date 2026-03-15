@@ -19,6 +19,11 @@
     <meta name="apple-mobile-web-app-title" content="Sniper">
     <link rel="apple-touch-icon" href="icon-512.png">
 
+    <!-- 캐시 방지 메타 태그 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>NETFLIX SNIPER 2000</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
@@ -303,16 +308,26 @@
         </div>
     </div>
 
-    <!-- 외부 데이터 파일 로드 -->
-    <script src="data.js"></script>
+    <!-- 외부 데이터 파일 로드 (버전 파라미터로 캐시 방지) -->
+    <script>
+        document.write('<script src="data.js?v=' + new Date().getTime() + '"><\/script>');
+    </script>
     <script>
         // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('SW registered!', reg);
-                }).catch(err => {
-                    console.log('SW registration failed!', err);
+                    // 새 버전 발견 시 자동 업데이트
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                if (confirm("새로운 버전이 업데이트되었습니다! 적용할까요?")) {
+                                    window.location.reload();
+                                }
+                            }
+                        };
+                    };
                 });
             });
         }
