@@ -164,6 +164,7 @@
             display: flex;
             gap: 10px;
             justify-content: center;
+            flex-direction: column;
         }
 
         .snipe-btn {
@@ -177,6 +178,22 @@
             text-shadow: 2px 2px #000;
             width: 100%;
             -webkit-appearance: none;
+        }
+
+        .copy-btn {
+            background: var(--win-gray);
+            color: #000;
+            border: 3px outset #fff;
+            padding: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .copy-btn:active {
+            border-style: inset;
         }
 
         .snipe-btn:active {
@@ -240,6 +257,7 @@
 
             <div class="btn-container">
                 <button class="snipe-btn" onclick="snipe()">[ SNIPE IT! ]</button>
+                <button class="copy-btn" id="copy-btn" onclick="copyResult()" style="display:none;">[ COPY TO CLIPBOARD ]</button>
             </div>
 
             <div class="footer">
@@ -289,6 +307,19 @@
             } catch(e) {}
         }
 
+        let lastResult = null;
+
+        function copyResult() {
+            if (!lastResult) return;
+            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert("결과가 클립보드에 복사되었습니다! 🚀\n친구에게 공유해보세요.");
+            }).catch(err => {
+                alert("복사 실패: " + err);
+            });
+        }
+
         function snipe() {
             if (cleanMovies.length === 0) {
                 alert("ERROR: DATA.JS NOT FOUND OR EMPTY!");
@@ -300,6 +331,7 @@
             const naverEl = document.getElementById('rate-naver');
             const rottenEl = document.getElementById('rate-rotten');
             const genreEl = document.getElementById('movie-genre');
+            const copyBtn = document.getElementById('copy-btn');
 
             // 필터 적용
             let pool = filter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === filter);
@@ -318,6 +350,7 @@
 
             // 룰렛 애니메이션
             titleEl.classList.remove('glitter');
+            copyBtn.style.display = 'none';
             let count = 0;
             const interval = setInterval(() => {
                 const rnd = candidates[Math.floor(Math.random() * candidates.length)];
@@ -332,6 +365,7 @@
                     clearInterval(interval);
                     // 최종 결과 (완전 랜덤 선택 - 직전 루프 결과와 다르게)
                     const final = candidates[Math.floor(Math.random() * candidates.length)];
+                    lastResult = final;
 
                     // 히스토리에 추가
                     snipeHistory.push(final.t);
@@ -343,6 +377,7 @@
                     genreEl.innerText = `[${final.g}] ${final.s}`;
                     titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
+                    copyBtn.style.display = 'block';
                     playRetroSound();
                     if (navigator.vibrate) navigator.vibrate(200);
                 }
