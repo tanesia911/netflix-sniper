@@ -381,8 +381,10 @@
             if (p <= 2) return { label: "👑 전설의 레전드 (Legend)", color: "#ff00ff" };
             if (p <= 7) return { label: "💎 국가대표급 수작 (Elite)", color: "#00ffff" };
             if (p <= 15) return { label: "🔥 취향저격 보장 (Hot)", color: "#39ff14" };
-            if (p <= 30) return { label: "👍 볼만한 가치 있음 (Nice)", color: "#ffcc00" };
-            return { label: "✨ 숨겨진 평범한 보석", color: "#ffffff" };
+            if (p <= 30) return { label: "👍 볼만한 가치 있음 (Fine)", color: "#ffcc00" };
+            if (p <= 50) return { label: "😐 그냥저냥 평범함 (Average)", color: "#c0c0c0" };
+            if (p <= 75) return { label: "📉 킬링타임용 (Passable)", color: "#808080" };
+            return { label: "💩 시간 낭비 주의 (Hard Skip)", color: "#4b2c20" };
         }
 
         function snipe() {
