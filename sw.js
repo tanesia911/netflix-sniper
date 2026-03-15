@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sniper-v1';
+const CACHE_NAME = 'sniper-v2';
 const ASSETS = [
   './',
   './index.html',
