@@ -279,17 +279,6 @@
                 </select>
             </div>
 
-            <div class="filter-sec">
-                <label>VIBE:</label>
-                <select id="vibe-filter">
-                    <option value="ALL">ANY MOOD</option>
-                    <option value="신나는">UPBEAT (신나는)</option>
-                    <option value="긴장감">THRILLING (긴장감)</option>
-                    <option value="슬픈">EMOTIONAL (슬픈/감동)</option>
-                    <option value="잔잔한">CHILL (잔잔한)</option>
-                </select>
-            </div>
-
             <div class="result-box" id="result-box">
                 <div id="movie-title" style="cursor: pointer; text-decoration: underline;" onclick="openNetflix()">READY TO SNIPE?</div>
                 <div id="movie-percentile"></div>
@@ -407,7 +396,6 @@
             }
 
             const genFilter = document.getElementById('genre-filter').value;
-            const vibeFilter = document.getElementById('vibe-filter').value;
             const titleEl = document.getElementById('movie-title');
             const naverEl = document.getElementById('rate-naver');
             const imdbEl = document.getElementById('rate-imdb');
@@ -419,17 +407,6 @@
             // 1차 필터 (장르)
             let pool = genFilter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === genFilter);
             
-            // 2차 필터 (감정/바이브 - 장르명에 포함된 키워드로 매칭)
-            if (vibeFilter !== "ALL") {
-                const map = {
-                    "신나는": ["코미디", "액션", "예능", "모험"],
-                    "긴장감": ["범죄", "스릴러", "공포", "미스터리", "SF"],
-                    "슬픈": ["드라마", "로맨스", "다큐", "역사"],
-                    "잔잔한": ["다큐", "가족", "음악", "키즈"]
-                };
-                pool = pool.filter(m => map[vibeFilter].some(k => m.s.includes(k)));
-            }
-
             if (pool.length === 0) {
                 alert("해당 조건의 데이터가 부족합니다!\n다른 필터를 선택해 주세요.");
                 return;
