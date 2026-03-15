@@ -128,40 +128,45 @@
         }
 
         .result-box {
-            min-height: 140px;
+            min-height: 160px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border: 3px dashed var(--hot-pink);
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 10px;
             background: #fdfdfd;
         }
 
         #movie-title {
-            font-size: 22px;
+            font-size: 24px;
             color: #000;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             word-break: keep-all;
+            line-height: 1.2;
         }
 
         .ratings-container {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         .rate-line {
-            font-size: 19px;
+            font-size: 17px;
             font-weight: bold;
-            text-shadow: 1px 1px #000;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
-        #rate-naver { color: #ffaa00; }
-        #rate-rotten { color: #ff3131; }
+        #rate-naver { color: #2db400; text-shadow: 0.5px 0.5px #000; }
+        #rate-imdb { color: #f5c518; text-shadow: 0.5px 0.5px #000; }
+        #rate-rotten { color: #fa320a; text-shadow: 0.5px 0.5px #000; }
 
         #movie-genre {
             font-size: 14px;
@@ -255,11 +260,16 @@
             </div>
 
             <div class="result-box" id="result-box">
-                <div id="movie-percentile" style="font-size:16px; color: #ffaa00; font-weight:bold; margin-bottom: 5px;"></div>
+                <div id="movie-percentile" style="font-size:16px; color: #ff00ff; font-weight:bold; margin-bottom: 5px; height: 20px;"></div>
                 <div id="movie-title">READY TO SNIPE?</div>
                 <div class="ratings-container">
-                    <div class="rate-line"><span id="rate-naver">⭐ NAVER: --</span> | <span id="rate-imdb">🎬 IMDb: --</span></div>
-                    <div id="rate-rotten" class="rate-line">🍅 ROTTEN: --</div>
+                    <div class="rate-line">
+                        <span id="rate-naver">⭐ NAVER: --</span>
+                        <span id="rate-imdb">🎬 IMDb: --</span>
+                    </div>
+                    <div class="rate-line">
+                        <span id="rate-rotten">🍅 ROTTEN: --</span>
+                    </div>
                 </div>
                 <div id="movie-genre">PUSH THE BUTTON!</div>
             </div>
