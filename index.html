@@ -168,9 +168,12 @@
         #rate-imdb { color: #f5c518; text-shadow: 0.5px 0.5px #000; }
         #rate-rotten { color: #fa320a; text-shadow: 0.5px 0.5px #000; }
 
-        #movie-genre {
-            font-size: 14px;
-            color: var(--win-dark);
+        #movie-percentile {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            height: 22px;
+            text-shadow: 1px 1px 2px #000; /* 가독성 핵심 */
         }
 
         .btn-container {
@@ -271,8 +274,8 @@
             </div>
 
             <div class="result-box" id="result-box">
-                <div id="movie-percentile" style="font-size:16px; color: #ff00ff; font-weight:bold; margin-bottom: 5px; height: 20px;"></div>
                 <div id="movie-title" style="cursor: pointer; text-decoration: underline;" onclick="openNetflix()">READY TO SNIPE?</div>
+                <div id="movie-percentile"></div>
                 <div class="ratings-container">
                     <div class="rate-line">
                         <span id="rate-naver">⭐ NAVER: --</span>
@@ -378,7 +381,7 @@
             if (p <= 2) return { label: "👑 전설의 레전드 (Legend)", color: "#ff00ff" };
             if (p <= 7) return { label: "💎 국가대표급 수작 (Elite)", color: "#00ffff" };
             if (p <= 15) return { label: "🔥 취향저격 보장 (Hot)", color: "#39ff14" };
-            if (p <= 30) return { label: "👍 볼만한 가치 있음 (Nice)", color: "#ffff00" };
+            if (p <= 30) return { label: "👍 볼만한 가치 있음 (Nice)", color: "#ffcc00" };
             return { label: "✨ 숨겨진 평범한 보석", color: "#ffffff" };
         }
 
