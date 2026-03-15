@@ -259,9 +259,20 @@
                 </select>
             </div>
 
+            <div class="filter-sec">
+                <label>VIBE:</label>
+                <select id="vibe-filter">
+                    <option value="ALL">ANY MOOD</option>
+                    <option value="신나는">UPBEAT (신나는)</option>
+                    <option value="긴장감">THRILLING (긴장감)</option>
+                    <option value="슬픈">EMOTIONAL (슬픈/감동)</option>
+                    <option value="잔잔한">CHILL (잔잔한)</option>
+                </select>
+            </div>
+
             <div class="result-box" id="result-box">
                 <div id="movie-percentile" style="font-size:16px; color: #ff00ff; font-weight:bold; margin-bottom: 5px; height: 20px;"></div>
-                <div id="movie-title">READY TO SNIPE?</div>
+                <div id="movie-title" style="cursor: pointer; text-decoration: underline;" onclick="openNetflix()">READY TO SNIPE?</div>
                 <div class="ratings-container">
                     <div class="rate-line">
                         <span id="rate-naver">⭐ NAVER: --</span>
@@ -301,9 +312,23 @@
             });
         }
 
-        // ===== 중복 방지 히스토리 (최근 20개 기억) =====
-        const snipeHistory = [];
-        const HISTORY_SIZE = 20;
+        // ===== 고도화된 안티-피로 시스템 (LocalStorage) =====
+        const HISTORY_KEY = 'sniper_history_v2';
+        const HISTORY_SIZE = 50;
+        let snipeHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        let lastResult = null;
+
+        function saveHistory(title) {
+            snipeHistory.push(title);
+            if (snipeHistory.length > HISTORY_SIZE) snipeHistory.shift();
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(snipeHistory));
+        }
+
+        function openNetflix() {
+            if (!lastResult) return;
+            const url = `https://www.netflix.com/search?q=${encodeURIComponent(lastResult.t)}`;
+            window.open(url, '_blank');
+        }
 
         // data.js 로드 후 중복 제거된 유니크 리스트로 정리
         let cleanMovies = [];
@@ -315,7 +340,6 @@
                 seen.add(m.t);
                 return true;
             });
-            // 카운터 업데이트
             const counter = document.getElementById('data-counter');
             if (counter) counter.textContent = `LOADED: ${cleanMovies.length} TITLES`;
         }
@@ -337,11 +361,10 @@
             } catch(e) {}
         }
 
-        let lastResult = null;
-
         function copyResult() {
             if (!lastResult) return;
-            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: 상위 ${lastResult.p}% 명작]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
+            const grade = getGrade(lastResult.p);
+            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: ${grade.label}]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n지금 바로 확인: https://tanesia911.github.io/netflix-sniper/`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert("결과가 클립보드에 복사되었습니다! 🚀\n친구에게 공유해보세요.");
@@ -350,13 +373,23 @@
             });
         }
 
+        function getGrade(p) {
+            if (p <= 0.5) return { label: "🔱 천계의 명작 (God Tier)", color: "#ff0000" };
+            if (p <= 2) return { label: "👑 전설의 레전드 (Legend)", color: "#ff00ff" };
+            if (p <= 7) return { label: "💎 국가대표급 수작 (Elite)", color: "#00ffff" };
+            if (p <= 15) return { label: "🔥 취향저격 보장 (Hot)", color: "#39ff14" };
+            if (p <= 30) return { label: "👍 볼만한 가치 있음 (Nice)", color: "#ffff00" };
+            return { label: "✨ 숨겨진 평범한 보석", color: "#ffffff" };
+        }
+
         function snipe() {
             if (cleanMovies.length === 0) {
                 alert("ERROR: DATA.JS NOT FOUND OR EMPTY!");
                 return;
             }
 
-            const filter = document.getElementById('genre-filter').value;
+            const genFilter = document.getElementById('genre-filter').value;
+            const vibeFilter = document.getElementById('vibe-filter').value;
             const titleEl = document.getElementById('movie-title');
             const naverEl = document.getElementById('rate-naver');
             const imdbEl = document.getElementById('rate-imdb');
@@ -365,22 +398,34 @@
             const percEl = document.getElementById('movie-percentile');
             const copyBtn = document.getElementById('copy-btn');
 
-            // 필터 적용
-            let pool = filter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === filter);
+            // 1차 필터 (장르)
+            let pool = genFilter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === genFilter);
+            
+            // 2차 필터 (감정/바이브 - 장르명에 포함된 키워드로 매칭)
+            if (vibeFilter !== "ALL") {
+                const map = {
+                    "신나는": ["코미디", "액션", "예능", "모험"],
+                    "긴장감": ["범죄", "스릴러", "공포", "미스터리", "SF"],
+                    "슬픈": ["드라마", "로맨스", "다큐", "역사"],
+                    "잔잔한": ["다큐", "가족", "음악", "키즈"]
+                };
+                pool = pool.filter(m => map[vibeFilter].some(k => m.s.includes(k)));
+            }
 
             if (pool.length === 0) {
-                alert("해당 장르의 데이터가 없습니다!\nfetch_data.py 로 데이터를 먼저 수집해주세요.");
+                alert("해당 조건의 데이터가 부족합니다!\n다른 필터를 선택해 주세요.");
                 return;
             }
 
-            // 히스토리에 없는 것만 후보로 (히스토리보다 pool이 작으면 히스토리 초기화)
+            // 히스토리에 없는 것만 후보로
             let candidates = pool.filter(m => !snipeHistory.includes(m.t));
             if (candidates.length === 0) {
-                snipeHistory.length = 0; // 히스토리 리셋
+                alert("모든 콘텐츠를 스나이프했습니다! 히스토리를 리셋합니다.");
+                snipeHistory = [];
+                localStorage.removeItem(HISTORY_KEY);
                 candidates = pool;
             }
 
-            // 룰렛 애니메이션
             titleEl.classList.remove('glitter');
             copyBtn.style.display = 'none';
             percEl.innerText = "";
@@ -397,13 +442,9 @@
 
                 if (count > 14) {
                     clearInterval(interval);
-                    // 최종 결과
                     const final = candidates[Math.floor(Math.random() * candidates.length)];
                     lastResult = final;
-
-                    // 히스토리에 추가
-                    snipeHistory.push(final.t);
-                    if (snipeHistory.length > HISTORY_SIZE) snipeHistory.shift();
+                    saveHistory(final.t);
 
                     titleEl.innerText = final.t;
                     naverEl.innerText = "⭐ NAVER: " + final.r;
@@ -411,13 +452,9 @@
                     rottenEl.innerText = "🍅 ROTTEN: " + final.rt;
                     genreEl.innerText = `[${final.g}] ${final.s}`;
                     
-                    // 상위 % 표시 및 등급 라벨링
-                    let label = "GOOD CONTENT";
-                    if (final.p <= 1) label = "👑 TOP 1% MASTERPIECE";
-                    else if (final.p <= 5) label = "💎 TOP 5% LEGENDARY";
-                    else if (final.p <= 15) label = "🔥 TOP 15% HIGH QUALITY";
-                    
-                    percEl.innerText = `${label} (상위 ${final.p}%)`;
+                    const grade = getGrade(final.p);
+                    percEl.innerText = `${grade.label} (상위 ${final.p}%)`;
+                    percEl.style.color = grade.color;
                     
                     titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
