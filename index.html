@@ -11,6 +11,14 @@
     <meta property="og:url" content="https://tanesia911.github.io/netflix-sniper/">
     <meta property="og:type" content="website">
 
+    <!-- PWA / Mobile Web App -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff00ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sniper">
+    <link rel="apple-touch-icon" href="icon-512.png">
+
     <title>NETFLIX SNIPER 2000</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
@@ -271,6 +279,17 @@
     <!-- 외부 데이터 파일 로드 -->
     <script src="data.js"></script>
     <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW registered!', reg);
+                }).catch(err => {
+                    console.log('SW registration failed!', err);
+                });
+            });
+        }
+
         // ===== 중복 방지 히스토리 (최근 20개 기억) =====
         const snipeHistory = [];
         const HISTORY_SIZE = 20;

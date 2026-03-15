@@ -1,0 +1,16 @@
+{
+  "name": "Netflix Sniper",
+  "short_name": "Sniper",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#008080",
+  "theme_color": "#ff00ff",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
