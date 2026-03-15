@@ -217,6 +217,7 @@
                     <option value="드라마">SERIES (드라마)</option>
                     <option value="예능">SHOWS (예능)</option>
                     <option value="애니">ANIME (애니)</option>
+                    <option value="다큐">DOCO (다큐)</option>
                 </select>
             </div>
 
@@ -235,6 +236,7 @@
 
             <div class="footer">
                 (C) 2000 CEOK MULTIMEDIA SYSTEM<br>
+                <span id="data-counter" style="color:#39ff14;font-size:14px;">LOADING DATA...</span><br>
                 <span class="glitter">Best viewed in Netscape 4.0</span>
             </div>
         </div>
@@ -243,71 +245,104 @@
     <!-- 외부 데이터 파일 로드 -->
     <script src="data.js"></script>
     <script>
-        function playRetroSound() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.type = 'square';
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.3);
+        // ===== 중복 방지 히스토리 (최근 20개 기억) =====
+        const snipeHistory = [];
+        const HISTORY_SIZE = 20;
+
+        // data.js 로드 후 중복 제거된 유니크 리스트로 정리
+        let cleanMovies = [];
+        function initData() {
+            if (typeof movies === 'undefined') return;
+            const seen = new Set();
+            cleanMovies = movies.filter(m => {
+                if (seen.has(m.t)) return false;
+                seen.add(m.t);
+                return true;
+            });
+            // 카운터 업데이트
+            const counter = document.getElementById('data-counter');
+            if (counter) counter.textContent = `LOADED: ${cleanMovies.length} TITLES`;
         }
 
-        let lastSnipe = "";
+        function playRetroSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
 
         function snipe() {
+            if (cleanMovies.length === 0) {
+                alert("ERROR: DATA.JS NOT FOUND OR EMPTY!");
+                return;
+            }
+
             const filter = document.getElementById('genre-filter').value;
             const titleEl = document.getElementById('movie-title');
             const naverEl = document.getElementById('rate-naver');
             const rottenEl = document.getElementById('rate-rotten');
             const genreEl = document.getElementById('movie-genre');
-            
-            // data.js 로드 확인
-            if (typeof movies === 'undefined') {
-                alert("ERROR: DATA.JS NOT FOUND!");
+
+            // 필터 적용
+            let pool = filter === "ALL" ? cleanMovies : cleanMovies.filter(m => m.g === filter);
+
+            if (pool.length === 0) {
+                alert("해당 장르의 데이터가 없습니다!\nfetch_data.py 로 데이터를 먼저 수집해주세요.");
                 return;
             }
 
-            let filteredMovies = filter === "ALL" ? movies : movies.filter(m => m.g === filter);
-            if (filteredMovies.length > 1) {
-                filteredMovies = filteredMovies.filter(m => m.t !== lastSnipe);
-            }
-            
-            if (filteredMovies.length === 0) {
-                alert("COMING SOON!");
-                return;
+            // 히스토리에 없는 것만 후보로 (히스토리보다 pool이 작으면 히스토리 초기화)
+            let candidates = pool.filter(m => !snipeHistory.includes(m.t));
+            if (candidates.length === 0) {
+                snipeHistory.length = 0; // 히스토리 리셋
+                candidates = pool;
             }
 
+            // 룰렛 애니메이션
+            titleEl.classList.remove('glitter');
             let count = 0;
             const interval = setInterval(() => {
-                const randomMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
-                titleEl.innerText = randomMovie.t;
-                naverEl.innerText = "⭐ NAVER: " + randomMovie.r;
-                rottenEl.innerText = "🍅 ROTTEN: " + randomMovie.rt;
-                genreEl.innerText = `[${randomMovie.g}] ${randomMovie.s}`;
+                const rnd = candidates[Math.floor(Math.random() * candidates.length)];
+                titleEl.innerText = rnd.t;
+                naverEl.innerText = "⭐ NAVER: " + rnd.r;
+                rottenEl.innerText = "🍅 ROTTEN: " + rnd.rt;
+                genreEl.innerText = `[${rnd.g}] ${rnd.s}`;
                 titleEl.style.color = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
                 count++;
-                
-                if (count > 12) {
+
+                if (count > 14) {
                     clearInterval(interval);
-                    const finalMovie = filteredMovies[Math.floor(Math.random() * filteredMovies.length)];
-                    lastSnipe = finalMovie.t;
-                    titleEl.innerText = finalMovie.t;
-                    naverEl.innerText = "⭐ NAVER: " + finalMovie.r;
-                    rottenEl.innerText = "🍅 ROTTEN: " + finalMovie.rt;
-                    genreEl.innerText = `[${finalMovie.g}] ${finalMovie.s}`;
+                    // 최종 결과 (완전 랜덤 선택 - 직전 루프 결과와 다르게)
+                    const final = candidates[Math.floor(Math.random() * candidates.length)];
+
+                    // 히스토리에 추가
+                    snipeHistory.push(final.t);
+                    if (snipeHistory.length > HISTORY_SIZE) snipeHistory.shift();
+
+                    titleEl.innerText = final.t;
+                    naverEl.innerText = "⭐ NAVER: " + final.r;
+                    rottenEl.innerText = "🍅 ROTTEN: " + final.rt;
+                    genreEl.innerText = `[${final.g}] ${final.s}`;
                     titleEl.style.color = "#ff0000";
                     titleEl.classList.add('glitter');
                     playRetroSound();
                     if (navigator.vibrate) navigator.vibrate(200);
                 }
-            }, 70);
+            }, 65);
         }
+
+        // 페이지 로드 시 데이터 초기화
+        window.onload = initData;
     </script>
 </body>
 </html>
