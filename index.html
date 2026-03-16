@@ -274,7 +274,6 @@
                 <div id="movie-title" onclick="openNetflix()">READY TO SNIPE?</div>
                 <div id="movie-percentile"></div>
                 <div class="ratings-container">
-                    <div class="rate-line" id="rate-naver">⭐ NAVER: --</div>
                     <div class="rate-line" id="rate-imdb">🎬 IMDb: --</div>
                     <div class="rate-line" id="rate-rotten">🍅 ROTTEN: --</div>
                 </div>
@@ -359,7 +358,7 @@
         function copyResult() {
             if (!lastResult) return;
             const grade = getGrade(lastResult.p);
-            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: ${grade.label}]\n[${lastResult.g}] ${lastResult.s}\n⭐NAVER: ${lastResult.r} | 🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n확인: https://tanesia911.github.io/netflix-sniper/`;
+            const text = `[NETFLIX SNIPER 🔫]\n\n오늘의 운명: ${lastResult.t}\n[등급: ${grade.label}]\n[${lastResult.g}] ${lastResult.s}\n🎬IMDb: ${lastResult.im} | 🍅ROTTEN: ${lastResult.rt}\n\n확인: https://tanesia911.github.io/netflix-sniper/`;
             navigator.clipboard.writeText(text).then(() => alert("복사 완료! 🚀"));
         }
 
@@ -394,7 +393,6 @@
             const interval = setInterval(() => {
                 const rnd = candidates[Math.floor(Math.random() * candidates.length)];
                 titleEl.innerText = rnd.t;
-                naverEl.innerText = "⭐ NAVER: " + rnd.r;
                 imdbEl.innerText = "🎬 IMDb: " + rnd.im;
                 rottenEl.innerText = "🍅 ROTTEN: " + rnd.rt;
                 genreEl.innerText = `[${rnd.g}] ${rnd.s}`;
@@ -405,7 +403,6 @@
                     const final = candidates[Math.floor(Math.random() * candidates.length)];
                     lastResult = final; saveHistory(final.t);
                     titleEl.innerText = final.t;
-                    naverEl.innerText = "⭐ NAVER: " + final.r;
                     imdbEl.innerText = "🎬 IMDb: " + final.im;
                     rottenEl.innerText = "🍅 ROTTEN: " + final.rt;
                     genreEl.innerText = `[${final.g}] ${final.s}`;
