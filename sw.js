@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sniper-v3';
+const CACHE_NAME = 'sniper-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -23,8 +23,8 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Always try to fetch data.js from network first to ensure fresh data
-  if (e.request.url.includes('data.js')) {
+  // Always try to fetch data.js and index.html from network first to ensure fresh data
+  if (e.request.url.includes('data.js') || e.request.url.includes('index.html')) {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
     );
